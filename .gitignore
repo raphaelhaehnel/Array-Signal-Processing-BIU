@@ -3,4 +3,7 @@
 4students.7z
 
 *.asv
-Lab_Exercises_Raphael.docx
+*.docx
+*.tmp
+
+draft.m
