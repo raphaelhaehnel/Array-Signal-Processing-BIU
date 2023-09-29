@@ -25,7 +25,7 @@ set(gca,'Fontsize',12)
 axis([ Ndl_set(end) Ndl_set(1) 0.04 150])
 xlabel('{\itN d} / \lambda','Fontsize',12)
 ylabel('3-dB BW in degrees','Fontsize',12)
-text(12,35,'Endfire','Fontsize',12)
+text(12,35,'Endfire','Fontsize',10)
 box on
 grid on
 hold on
@@ -36,7 +36,8 @@ hold on
 Theta_limit = acos( 1 - 2*c0./Ndl_set);  % rad
 Theta_limit_deg = Theta_limit*180/pi;    % degrees
 loglog( Ndl_set, abs(Theta_limit_deg),'--r');
-text(12,10,'OK','Fontsize',12)
+text(12,15,'Scan limit','Fontsize',10)
+text(12,2.5,'90^\circ','Fontsize',10)
 
 % Half-power bandwidth for different angles
 bw = zeros(1,length(theta_rad));
