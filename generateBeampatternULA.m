@@ -56,6 +56,7 @@ function [] = generateBeampatternULA(N, spaces, plot_type)
             ylabel("B_{\Phi}");
             ylim([-40, 0])
             set(get(gca,'ylabel'), 'rotation', 0);
+            grid on;
         end
 
         if plot_type == "polar"
@@ -76,6 +77,7 @@ function [] = generateBeampatternULA(N, spaces, plot_type)
             ylabel("B_{k_z}");
             ylim([-40, 0])
             set(get(gca,'ylabel'), 'rotation', 0);
+            grid on;
         end
 
         if plot_type == "polar"
@@ -94,6 +96,7 @@ function [] = generateBeampatternULA(N, spaces, plot_type)
             ylabel("B_u");
             ylim([-40, 0])
             set(get(gca,'ylabel'), 'rotation', 0);
+            grid on;
         end
 
         if plot_type == "polar"
@@ -108,11 +111,12 @@ function [] = generateBeampatternULA(N, spaces, plot_type)
         i = i + 1;
         
         if plot_type == "plot"
-            plot(theta, mag2db(abs(B_theta)));
-            xlabel("\theta");
+            plot(rad2deg(theta), mag2db(abs(B_theta)));
+            xlabel("\theta (in degree)");
             ylabel("B_{\theta}");
             ylim([-40, 0])
             set(get(gca,'ylabel'), 'rotation', 0);
+            grid on;
         end
 
         if plot_type == "polar"

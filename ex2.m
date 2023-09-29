@@ -34,4 +34,3 @@ ylim([-40, 0])
 set(get(gca,'ylabel'), 'rotation', 0);
 legend("w_{I}(n)", "w_{II}(n)");
 
-% TODO explain what is the effect of non-uniform weighting

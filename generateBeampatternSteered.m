@@ -38,7 +38,7 @@ function [] = generateBeampatternSteered(N, steering_angles)
         B_theta = 1/N * sin(pi*d*N/lambda*(cos(theta)-cos(theta_T)))./sin(pi*d/lambda*(cos(theta)-cos(theta_T)));
 
         polardb(theta, mag2db(abs(B_theta)), -40, '-r');
-        title("steering angle \theta_T=" + theta_T_deg + "\degree");
+        title("steering angle $\theta_T$=" + theta_T_deg + "$^{\circ}$", 'interpreter', 'latex');
     end
     
 

@@ -19,29 +19,13 @@ lambda = c0 / f0;
 fs = 3 * f0;
 
 % Signal length in samples
-% N = 2^10; 
-N = 2^8;
+N = 2^10;
 
 [y,h] = NB_signal( fs, f0, N);
-
-delay = 0.01;
-
-y_delay = frac_delay( y, delay, fs );
-% x      : discrete input signal
-% delay  : signal delay in seconds
-% fs     : sampling frequency in Hz
-
-hold on;
+y = y';
 
 % Time axis
 t = (0:N-1)/fs;
-
-% Plot the source signal
-plot(t, y);
-
-% Plot the delayed source signal
-plot(t, y_delay);
-legend("original signal", "delayed signal");
 
 % Different directions-of-arrival
 theta_in = 0:5:90;
@@ -49,31 +33,33 @@ theta_in = 0:5:90;
 % Coordinates of the sensors
 z = 0:d:d*(N_sensors-1);
 
+% Generate a meshgrid to compute the delay as a function of (theta, z)
 [THETA_IN, Z] = meshgrid(theta_in, z);
-
 delay = Z.*cosd(THETA_IN) / c0;
 
 figure();
 grid on;
 
-% Plot the delays for each angle
-plot(delay);
-
-figure();
-hold on;
+% Plot the delays for each angle (only for visualization)
+plot(z, delay, ".-");
+ylabel("delay");
+xlabel("z");
+title("Delay of the input for multiple directions of arrival");
 
 % Generate all the delayed signals
 y_in = zeros(N_sensors, N, length(theta_in));
 for j = 1:length(theta_in)
     for i = 1:N_sensors
         disp(i)
-        y_in(i, :, j) = frac_delay( y, delay(i, j), fs ); % Why don't use delayseq
-        % plot(t, y_in(i, :, j));
+        y_in(i, :, j) = delayseq( y, delay(i, j), fs );
     end
 end
 
-% Build the signal back, for different directions-of-arrival
+% In the next section, we are building the signal back,
+% for different directions-of-arrival and for two different steering angle:
+% 0 (endfire) and 90 (broadside)
 
+% Total power of the input signal
 power_in = rms(N_sensors * y)^2;
 
 % Endfire orientation
@@ -83,15 +69,19 @@ for j = 1:length(theta_in)
     subplot(ceil(length(theta_in)/3), 3, j);
     hold on;
     grid on;
+
+    % Delay and sum the signals from the different inputs
     dsb = zeros(1, N);
 
     for i = 1:N_sensors
-        disp(i)
-        dsb = dsb + frac_delay( y_in(i, :, j), - delay(i, 1), fs );
+
+        % Delay the input signal for an orientation of 0 degree
+        dsb = dsb + delayseq( y_in(i, :, j)', - delay(i, 1), fs )';
+
     end
 
-    plot(N_sensors * y, 'b');
-    plot(dsb);
+    plot(t, N_sensors * y, 'b');
+    plot(t, dsb);
     title(theta_in(j));
     endfire_ratio(j) = rms(dsb)^2 / power_in;
 end
@@ -105,26 +95,59 @@ for j = 1:length(theta_in)
     subplot(ceil(length(theta_in)/3), 3, j);
     hold on;
     grid on;
+
+     % Delay and sum the signals from the different inputs
     dsb = zeros(1, N);
 
     for i = 1:N_sensors
-        disp(i)
+        
+        % Delay the input signal for an orientation of 90 degree (no delay)
         dsb = dsb + y_in(i, :, j);
+
     end
 
-    plot(N_sensors * y, 'b');
-    plot(dsb);
+    plot(t, N_sensors * y, 'b');
+    plot(t, dsb);
     title(theta_in(j));
     broadside_ratio(j) =  rms(dsb)^2 / power_in;
 end
 sgtitle("DSB broadside")
 
+
+% Resolution in x axis
+R = 300;
+
+% theta-space
+theta_max = pi/2;
+theta = linspace(0, theta_max, R);
+
 figure();
+hold on;
+grid on;
+
+theta_T = pi/2;
+% The beampattern in the angle space for an ULA with uniform weigths 
+% and array steering is given by (we'll use it instead of the previous one)
+B_theta = 1/N_sensors * sin(pi*d*N_sensors/lambda*(cos(theta)-cos(theta_T)))./sin(pi*d/lambda*(cos(theta)-cos(theta_T)));
+
 plot(theta_in, mag2db(broadside_ratio));
+plot(rad2deg(theta), mag2db(abs(B_theta)));
+legend("Simulated beampattern", "Analytic beampattern");
+ylim([-60, 0]);
 title("Broadside OIR");
 
+
 figure();
+hold on;
+grid on;
+
+theta_T = 0;
+% The beampattern in the angle space for an ULA with uniform weigths 
+% and array steering is given by (we'll use it instead of the previous one)
+B_theta = 1/N_sensors * sin(pi*d*N_sensors/lambda*(cos(theta)-cos(theta_T)))./sin(pi*d/lambda*(cos(theta)-cos(theta_T)));
+
 plot(theta_in, mag2db(endfire_ratio));
+plot(rad2deg(theta), mag2db(abs(B_theta)));
+legend("Simulated beampattern", "Analytic beampattern");
+ylim([-60, 0]);
 title("Endfire OIR");
-
-
