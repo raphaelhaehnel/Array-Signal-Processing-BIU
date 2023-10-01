@@ -1,5 +1,7 @@
 % Exercice 4: Beampattern of MVDR Beamformer
 
+close all; clc; clear all;
+
 % The number of sensors
 N = 10;
 
@@ -9,57 +11,70 @@ lambda = 10e-9;
 % Sensor spacing
 d = lambda/2;
 
-% Steering vector
-theta_t = pi/2;
-
 % Resolution in x axis
-R = 1000;
+R = 400;
 
 % u-space
 u_max = 1;
-u = linspace(-u_max, u_max, R);
-[U, n] = meshgrid(u, 0:N-1);
+u = linspace(-u_max, u_max, R)';
+[u_mat, n_mat] = meshgrid(u, 0:N-1);
 
 % Array manifold vector
-v_s = exp(1j.*n.*(2*pi*d/lambda).*U);
+v = exp(1j.*n_mat.*(2*pi*d/lambda).*u_mat);
 
-% Interferer
-u_I = [0.3 0.004];
+% Steering direction
+u0 = 0;
 
+% Interferers
+u1 = 0.27;
+u2 = 0.004;
+
+v0 = exp(1j*2*pi*d/lambda*(0:N-1)'*u0);
+v1 = exp(1j*2*pi*d/lambda*(0:N-1)'*u1);
+v2 = exp(1j*2*pi*d/lambda*(0:N-1)'*u2);
+
+% Interference-to-noise ratio (INR)
 inr = 70;
 
+% Definition of the covariance
 sigma_1 = sqrt(db2mag(inr));
 sigma_w = 1;
 
-for k = 1 : length(u_I)
+% Noise covariance matrix
+S = sigma_w^2*eye(N) + sigma_1^2*(v1*v1');
 
-    % Initialize the weights and the beampattern
-    w_o = zeros(N, R);
-    B = zeros(N, 1);
+% Weight of the MVDR beamformer
+w0 = (S^(-1) * v0) / (v0' * S^(-1) * v0);
 
-    figure();
-    hold on;
-    grid on;
+% Powerpattern
+B = v' * w0;
 
-    for l = 1 : length(v_s)
+figure();
+plot(u, mag2db(abs(B)));
+xline(0.3,'--r','u1 = 0.3', 'LabelOrientation', 'horizontal', 'LineWidth', 1);
+title("MVDR beamformer for u1 = 0.3");
+xlabel("u");
+ylabel("B_u");
+ylim([-40, 0]);
+grid on;
 
-        % Direction of the interferer
-        v_1 = exp(1j.*n(:,1).*(2*pi*d/lambda).*u_I(k));
-        S_n = sigma_w^2*eye(N) + sigma_1^2*(v_1*v_1');
-    
-        % Weight of the MVDR beamformer
-        w_o(:, l) = v_s(:, l)'*inv(S_n) / (v_s(:, l)' * inv(S_n) * v_s(:, l));
-        
-        % Powerpattern
-        B(l) = w_o(:, l)'*v_s(:, l);
 
-    end
+% Noise covariance matrix
+S = sigma_w^2*eye(N) + sigma_1^2*(v2*v2');
 
-    plot(u, mag2db(abs(B)));
-    title("Beampattern for u_1 = " + u_I(k));
-    xlabel("u");
-    ylabel("B_u");
-    ylim([-40, 0])
-end
+% Weight of the MVDR beamformer
+w0 = (S^(-1) * v0) / (v0' * S^(-1) * v0);
+
+% Powerpattern
+B = v' * w0;
+
+figure();
+plot(u, mag2db(abs(B)));
+xline(0.004,'--r','u1 = 0.004', 'LabelOrientation', 'horizontal', 'LineWidth', 1);
+title("MVDR beamformer for u1 = 0.004");
+xlabel("u");
+ylabel("B_u");
+ylim([max(mag2db(abs(B)))-40, max(mag2db(abs(B)))]);
+grid on;
 
 
