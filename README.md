@@ -4,7 +4,7 @@ This repository contains exercises from the **Array Signal Processing** course w
 
 ## Beampattern of a Uniform Linear Array (ULA)
 
-We analyze a uniform linear array (ULA) with **N = 10** sensors, uniform weights (**w_n = 1/N**), and sensor spacing **d = \( \lambda/2 \)**.
+We analyze a uniform linear array (ULA) with **N = 10** sensors, uniform weights $`w_n = 1/N`$ and sensor spacing $`d=\lambda/2`$.
 
 ### Magnitude (dB) of the Beampattern
 - **Even number of sensors (N=10):**  
@@ -26,18 +26,18 @@ We analyze a uniform linear array (ULA) with **N = 10** sensors, uniform weights
 - **More sidelobes for N=11** (5 instead of 4), making them narrower.
 - Null at **endfire direction** for even N.
 
-### Power Pattern in \(\Theta\)-Space
+### Power Pattern in $`\Theta`$-Space
 #### Effect of Sensor Spacing \(d\)
 ![image](https://github.com/user-attachments/assets/3e34db15-a77d-43e0-9455-ef99073b5229)
 - Smaller **d** results in:
   - **Wider main lobe** at broadside.
   - **Fewer nulls and sidelobes**.
 
-#### Steering Angles (\(\Theta_T = 0°, 30°, 60°, 90°\))
+#### Steering Angles $`\Theta_T = 0°, 30°, 60°, 90°`$
 ![image](https://github.com/user-attachments/assets/caffcdf4-0d3d-439d-992f-a0a95fda9027)
 - **More steering = wider main beam**.
 
-### Sensor Failure (\(w_n = 0\) for \(n=3,5,6\))
+### Sensor Failure $`w_n = 0`$ for n=3,5,6
 ![image](https://github.com/user-attachments/assets/2273b220-81eb-4940-9461-08a61ca461d7)
 - Sensor failure leads to:
   - **Lower main lobe**.
@@ -46,7 +46,7 @@ We analyze a uniform linear array (ULA) with **N = 10** sensors, uniform weights
 
 ## Non-Uniform Weighting
 
-### Beampattern in \(u\)-Space with Different Weights
+### Beampattern in u-Space with Different Weights
 ![image](https://github.com/user-attachments/assets/17d6fbf3-4185-4921-b90f-e9c73ef63dd2)
 
 #### Observations
@@ -54,7 +54,7 @@ We analyze a uniform linear array (ULA) with **N = 10** sensors, uniform weights
 
 ## Half-Power Bandwidth
 
-### Beamwidth Variation with Steering Angles (\(2.5° \leq \Theta \leq 90°\))
+### Beamwidth Variation with Steering Angles $`2.5° \leq \Theta \leq 90°`$
 ![image](https://github.com/user-attachments/assets/b9b40f4e-ea55-4cb0-b781-0d053725c0d4)
 
 #### Observations
@@ -63,12 +63,12 @@ We analyze a uniform linear array (ULA) with **N = 10** sensors, uniform weights
 
 ## Beampattern of the MVDR Beamformer
 
-### Beampattern in \(u\)-Domain for Different Interferer Locations (\(u_1 = 0.3, 0.004\))
+### Beampattern in \(u\)-Domain for Different Interferer Locations $`u_1 = 0.3, 0.004`$
 ![image](https://github.com/user-attachments/assets/035df252-3e13-483c-a226-86f9a0077262)
 ![image](https://github.com/user-attachments/assets/d57a25b2-54e1-4f14-9af7-aeba0651ffc1)
 
 #### Observations
-- For **u_1 \( \approx \) u_0** (steering direction), power pattern **explodes (>25dB)** due to conflicting constraints.
+- For $`u_1 \approx u_0`$ (steering direction), power pattern **explodes (>25dB)** due to conflicting constraints.
 
 ### Power Pattern for Different INR Values
 - **INR=70 dB & INR=0 dB:**  
@@ -82,7 +82,7 @@ We analyze a uniform linear array (ULA) with **N = 10** sensors, uniform weights
 
 ## Delay-and-Sum Beamformer for Narrowband Signals
 
-We use the provided MATLAB functions **NB_signal** and **polardb**, but instead of **frac_delay**, we use **delayseq** (better performance).
+We use the provided MATLAB functions `NB_signal` and `polardb`, but instead of `frac_delay`, we use `delayseq` (better performance).
 
 ### Delay Computation
 ![image](https://github.com/user-attachments/assets/5e19c9a5-7193-4fec-98e5-3f24123584c5)
