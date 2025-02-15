@@ -100,6 +100,4 @@ We use the provided MATLAB functions `NB_signal` and `polardb`, but instead of `
 #### Observations
 - **Simulated beampattern** follows the **same trend** as the analytical one.
 
----
-This README provides a structured overview of the key exercises and observations in **Array Signal Processing**, improving readability and clarity.
 
